@@ -31,61 +31,61 @@
      *
     **/
 
-    const margin = {top: 0, right: 0, bottom: 0, left: 0};
+const margin = {top: 0, right: 0, bottom: 0, left: 0};
 	const width = 1000 - margin.left - margin.right;
 	const height = 2000 - margin.top - margin.bottom;
 
-    const color = d3.scaleThreshold()
+const color = d3.scaleThreshold()
         .domain([3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8])
         .range( d3.schemeRdYlGn[11] )
         .unknown(d3.rgb(255,200,200));
 
-    const size = d3.scaleSqrt()
+const size = d3.scaleSqrt()
         .domain([200000, 1310000000])
         .range([1, 25]);
 
-    const svg = d3.select('body')
+const svg = d3.select('body')
 			.append('svg')
 			.attr('width', width)
 			.attr('height', height);
 
-    const map = svg
+const map = svg
         .append('g')
         .attr('class', 'map');
 
-    const scatterplot = svg
+const scatterplot = svg
         .append('g')
         .attr('class', 'scatterplot')
         .attr("transform", "translate(100,500)");
 
-    const scatterplot2 = svg
+const scatterplot2 = svg
         .append('g')
         .attr('class', 'scatterplot2')
         .attr("transform", "translate(100,690)");
 
-    const scatterplot3 = svg
+const scatterplot3 = svg
         .append('g')
         .attr('class', 'scatterplot3')
         .attr("transform", "translate(100,880)");
 
-    const scatterplot4 = svg
+const scatterplot4 = svg
         .append('g')
         .attr('class', 'scatterplot4')
         .attr("transform", "translate(100, 1070)");
 
-    const scatterplot5 = svg
+const scatterplot5 = svg
         .append('g')
         .attr('class', 'scatterplot5')
         .attr("transform", "translate(100,1260)");
 
-    const projection = d3.geoMercator()
+const projection = d3.geoMercator()
 			.scale(100)
 			.translate( [width / 2, 1000 / 3.5]);
 
-	const path = d3.geoPath().projection(projection);
+const path = d3.geoPath().projection(projection);
 
 
-    Promise.all([
+Promise.all([
         d3.csv('happiness.csv'),
         d3.json('world_countries.json')
 
@@ -99,24 +99,24 @@
         let fieldSize = "Population"
         let fieldCountry = "Country"
 
-        let Logged = 'Logged GDP per capita';
+let Logged = 'Logged GDP per capita';
         let Social = "Social support";
         let Healthy = "Healthy life expectancy";
         let Freedom = "Freedom to make life choices";
         let Perceptions = "Perceptions of corruption";
 
-        happiness.forEach(d => {
+happiness.forEach(d => {
             if(d[fieldColor] == '') {
                 d[fieldColor] = undefined;
             };
         });
-        happiness.forEach(d => {
+happiness.forEach(d => {
             if(d[fieldSize] == '') {
                 d[fieldSize] = undefined;
             };
         });
 
-        happiness.forEach(d => {
+happiness.forEach(d => {
             if(d[fieldCountry] == '') {
                 d[fieldCountry] = undefined;
             };
@@ -126,7 +126,7 @@
         happiness.forEach(d => { fertilityById[d.id] = +d[fieldCountry]; });
         countries.features.forEach( d => { d[fieldColor] = fertilityById[d.id]});
 
-        svg.append('g')
+svg.append('g')
 				.attr('class', 'countries')
 				.selectAll('path')
 				.data(countries.features)
@@ -159,28 +159,27 @@
                         .style("stroke", "white")
                 });
 
-		svg.append('path')
+svg.append('path')
 				.datum(topojson.mesh(countries.features, (a, b) => a.id !== b.id))
 				.attr('class', 'names')
 				.attr('d', path);
 
-        // setup x
-        var xValue = function(d) { return d[Logged];}, // data -> value
+var xValue = function(d) { return d[Logged];}, // data -> value
             xScale = d3.scaleLinear().range([0, 2000/2-150]), // value -> display
             xMap = function(d) { return xScale(xValue(d));}, // data -> display
             xAxis = d3.axisBottom().scale(xScale);
 
         // setup y
-        var yValue = function(d) { return d[fieldYAxis];}, // data -> value
+var yValue = function(d) { return d[fieldYAxis];}, // data -> value
             yScale = d3.scaleLinear().range([500/2-100, 0]), // value -> display
             yMap = function(d) { return yScale(yValue(d));}, // data -> display
             yAxis = d3.axisLeft().scale(yScale);
 
         // don't want dots overlapping axis, so add in buffer to data domain
-        xScale.domain([6.3, 12]);
+xScale.domain([6.3, 12]);
         yScale.domain([2.2, 8]);
 
-        scatterplot.append("text")
+scatterplot.append("text")
             .attr("x", 10)
             .attr("y", 0 - (margin.top / 2))
             .style("font-size", "10px")
@@ -199,7 +198,7 @@
             .text(Logged.replace(/_/g, " "));
 
         // y-axis
-        scatterplot.append("g")
+scatterplot.append("g")
             .attr("class", "y axis")
             .call(yAxis)
             .append("text")
@@ -212,7 +211,7 @@
             .text(fieldYAxis.replace(/_/g, " "));
 
         // draw dots
-        scatterplot.selectAll(".dot")
+scatterplot.selectAll(".dot")
             .data(happiness)
             .enter().append("circle")
             .attr("class", d => { return "dot COUNTRY-"+d.Country; } )
@@ -247,15 +246,15 @@
 
 
         // setup x
-        var xValue2 = function(d) { return d[Social];}, // data -> value
+var xValue2 = function(d) { return d[Social];}, // data -> value
             xScale2 = d3.scaleLinear().range([0, 2000/2-150]), // value -> display
             xMap2 = function(d) { return xScale2(xValue2(d));}, // data -> display
             xAxis2 = d3.axisBottom().scale(xScale2);
 
         // don't want dots overlapping axis, so add in buffer to data domain
-        xScale2.domain([0.3, 1.0]);
+xScale2.domain([0.3, 1.0]);
 
-        scatterplot2.append("text")
+scatterplot2.append("text")
             .attr("x", 10)
             .attr("y", 0 - (margin.top / 2))
             .style("font-size", "10px")
@@ -263,7 +262,7 @@
             .text("The Happiness Score vs Social Support");
 
         // x-axis
-        scatterplot2.append("g")
+scatterplot2.append("g")
             .attr("class", "x axis2")
             .attr("transform", "translate(0," + (500/2-100) + ")")
             .call(xAxis2)
@@ -275,7 +274,7 @@
             .text(Logged.replace(/_/g, " "));
 
         // y-axis
-        scatterplot2.append("g")
+scatterplot2.append("g")
             .attr("class", "y axis")
             .call(yAxis)
             .append("text")
@@ -287,8 +286,8 @@
             .style("text-anchor", "end")
             .text(fieldYAxis.replace(/_/g, " "));
 
-        // draw dots
-        scatterplot2.selectAll(".dot")
+        // draw dot
+scatterplot2.selectAll(".dot")
             .data(happiness)
             .enter().append("circle")
             .attr("class", d => { return "dot COUNTRY-"+d.Country; } )
@@ -318,15 +317,15 @@
 
 
         // setup x
-        var xValue3 = function(d) { return d[Healthy];}, // data -> value
+var xValue3 = function(d) { return d[Healthy];}, // data -> value
             xScale3 = d3.scaleLinear().range([0, 2000/2-150]), // value -> display
             xMap3 = function(d) { return xScale3(xValue3(d));}, // data -> display
             xAxis3 = d3.axisBottom().scale(xScale3);
 
         // don't want dots overlapping axis, so add in buffer to data domain
-        xScale3.domain([45, 80]);
+xScale3.domain([45, 80]);
 
-        scatterplot3.append("text")
+scatterplot3.append("text")
             .attr("x", 10)
             .attr("y", 0 - (margin.top / 2))
             .style("font-size", "10px")
@@ -334,7 +333,7 @@
             .text("The Happiness Score vs Healthy life expectancy");
 
         // x-axis
-        scatterplot3.append("g")
+scatterplot3.append("g")
             .attr("class", "x axis3")
             .attr("transform", "translate(0," + (500/2-100) + ")")
             .call(xAxis3)
@@ -346,7 +345,7 @@
             .text(Logged.replace(/_/g, " "));
 
         // y-axis
-        scatterplot3.append("g")
+scatterplot3.append("g")
             .attr("class", "y axis")
             .call(yAxis)
             .append("text")
@@ -359,7 +358,7 @@
             .text(fieldYAxis.replace(/_/g, " "));
 
         // draw dots
-        scatterplot3.selectAll(".dot")
+scatterplot3.selectAll(".dot")
             .data(happiness)
             .enter().append("circle")
             .attr("class", d => { return "dot COUNTRY-"+d.Country; } )
@@ -388,15 +387,15 @@
             });
 
         // setup x
-        var xValue4 = function(d) { return d[Freedom];}, // data -> value
+var xValue4 = function(d) { return d[Freedom];}, // data -> value
             xScale4 = d3.scaleLinear().range([0, 2000/2-150]), // value -> display
             xMap4 = function(d) { return xScale4(xValue4(d));}, // data -> display
             xAxis4 = d3.axisBottom().scale(xScale4);
 
         // don't want dots overlapping axis, so add in buffer to data domain
-        xScale4.domain([0.35, 1]);
+xScale4.domain([0.35, 1]);
 
-        scatterplot4.append("text")
+scatterplot4.append("text")
             .attr("x", 10)
             .attr("y", 0 - (margin.top / 2))
             .style("font-size", "10px")
@@ -404,7 +403,7 @@
             .text("The Happiness Score vs Freedom to make life choices");
 
         // x-axis
-        scatterplot4.append("g")
+scatterplot4.append("g")
             .attr("class", "x axis4")
             .attr("transform", "translate(0," + (500/2-100) + ")")
             .call(xAxis4)
@@ -416,7 +415,7 @@
             .text(Logged.replace(/_/g, " "));
 
         // y-axis
-        scatterplot4.append("g")
+scatterplot4.append("g")
             .attr("class", "y axis")
             .call(yAxis)
             .append("text")
@@ -429,7 +428,7 @@
             .text(fieldYAxis.replace(/_/g, " "));
 
         // draw dots
-        scatterplot4.selectAll(".dot")
+scatterplot4.selectAll(".dot")
             .data(happiness)
             .enter().append("circle")
             .attr("class", d => { return "dot COUNTRY-"+d.Country; } )
@@ -450,7 +449,7 @@
                     .attr('country', function(d){return d.Country})
                     .text(function(d){return d.Country; });
             })
-            .on("mouseout", function(d) {
+.on("mouseout", function(d) {
                 d3.select(this)
                     .transition()
                     .duration(500)
@@ -460,15 +459,15 @@
 
 
         // setup x
-        var xValue5 = function(d) { return d[Perceptions];}, // data -> value
+var xValue5 = function(d) { return d[Perceptions];}, // data -> value
             xScale5 = d3.scaleLinear().range([0, 2000/2-150]), // value -> display
             xMap5 = function(d) { return xScale5(xValue5(d));}, // data -> display
             xAxis5 = d3.axisBottom().scale(xScale5);
 
         // don't want dots overlapping axis, so add in buffer to data domain
-        xScale5.domain([0.1, 1]);
+xScale5.domain([0.1, 1]);
 
-        scatterplot5.append("text")
+scatterplot5.append("text")
             .attr("x", 10)
             .attr("y", 0 - (margin.top / 2))
             .style("font-size", "10px")
@@ -476,7 +475,7 @@
             .text("The Happiness Score vs Perceptions of Corruption");
 
         // x-axis
-        scatterplot5.append("g")
+scatterplot5.append("g")
             .attr("class", "x axis4")
             .attr("transform", "translate(0," + (500/2-100) + ")")
             .call(xAxis5)
@@ -488,7 +487,7 @@
             .text(Logged.replace(/_/g, " "));
 
         // y-axis
-        scatterplot5.append("g")
+scatterplot5.append("g")
             .attr("class", "y axis")
             .call(yAxis)
             .append("text")
@@ -501,7 +500,7 @@
             .text(fieldYAxis.replace(/_/g, " "));
 
         // draw dots
-        scatterplot5.selectAll(".dot")
+scatterplot5.selectAll(".dot")
             .data(happiness)
             .enter().append("circle")
             .attr("class", d => { return "dot COUNTRY-"+d.Country; } )
@@ -531,28 +530,28 @@
 
 
         // draw legend
-        var legend = scatterplot.append("g").attr("class", "legend-group").selectAll(".legend")
+var legend = scatterplot.append("g").attr("class", "legend-group").selectAll(".legend")
             .data(color.domain())
             .enter().append("g")
             .attr("class", "legend")
             .attr("transform", function(d, i) { return "translate(-100," + (i+1) * 20 + ")"; });
 
         // draw legend colored rectangles
-        legend.append("rect")
+legend.append("rect")
             .attr("x", width/1.05 + 4)
             .attr("width", 18)
             .attr("height", 18)
             .style("fill", (d,i)=> color(d-0.0001));
 
         // draw legend text
-        legend.append("text")
+legend.append("text")
             .attr("x", width/1.0)
             .attr("y", 9)
             .attr("dy", ".35em")
             .style("text-anchor", "end")
             .text(function(d) { return "< "+d;});
 
-        scatterplot.select("g.legend-group")
+scatterplot.select("g.legend-group")
             .append("g")
             .attr("class", "legend")
             .attr("transform", "translate(-100,0)")
@@ -562,7 +561,7 @@
             .attr("dy", "1.5em")
             .style("text-anchor", "end")
             .text(fieldColor);
-    });
+});
 
 
 </script>
