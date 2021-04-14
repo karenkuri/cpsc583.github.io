@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<head>
-    <title>The World Happiness Score in 2020</title>
-</head>
 <style>
     body {
         width: 940px;
